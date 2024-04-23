@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div>
+        <div id="nav">
+
+        </div>
+        <div id='section'>
+            <nav class="navbar bg-body-tertiary">
+                <div class="container" id="searchbar">
+                    <form id="fetchdetails" class="d-flex" role="search">
+                        <input class="form-control me-2" type="text" placeholder="Search" id="inputdata"
+                            name="inputdata" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+            <!-- output section -->
+            <div id="outputsection">
+                <div id="form">
+                    <h2>Create a New Blog Post</h2>
+                    <form action="/addblog" id="addblog" method="post" class="row g-3">
+                        <div class="col-md-9">
+                            <label for="inputEmail4" class="form-label">Blog Title :</label>
+                            <input type="text" class="form-control" id="inputname" name="inputtitle" required>
+                        </div>
+                        <div class="col-md-9">
+                            <label for="inputPassword4" class="form-label">Blog Author</label>
+                            <input type="text" class="form-control" id="inputdob" name="inputauthor" required>
+                        </div>
+
+                        <div class="col-9">
+                            <label for="inputAddress2" class="form-label">Blog Content :</label>
+                            <div class="input-group">
+                                <textarea class="form-control" aria-label="With textarea" id="inputcontent"
+                                    name="inputcontent"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary" id="submitbtn">ADD DATA</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="outputsection">
+                    <div id="left">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
+    <script>
+        const leftpart = document.getElementById('left');
+        async function loadAndDisplayStoredItems(){
+            try{
+                const res = await axios.get('http://localhost:3000/fetch-blogs');
+                console.log(res.data);
+                const label = document.createElement('ul');
+                const divlabel = document.createElement('div');
+                divlabel.id = "divlabel"
+                label.className = "list-group";
+
+                res.data.forEach((post) => {
+                    const labelli = document.createElement("li");
+                    const labellibtn = document.createElement("button");
+                    labelli.textContent = post.title; // Set the text content to the post title or whatever property contains the desired text
+
+                    labellibtn.type = "submit";
+                    labellibtn.textContent = "+"
+                    
+                    labelli.className = "list-group-item";
+                    labelli.id = "postli";
+                    labellibtn.id = "postbtn";
+
+                    console.log(post);
+                    
+                    labellibtn.addEventListener("click",async ()=>{
+                        const res = await axios.get('http://localhost:3000/fetch-blogs');
+                        res.data.forEach((post) => {
+                            const labellii = document.createElement("li");
+
+                            
+                            labellii.className = "list-group-item";
+                            labellii.id = "contentli";
+
+                            labellii.textContent = post.content;
+                            label.appendChild(labellii);
+                        })
+                    })
+                    
+
+                    label.appendChild(labelli);
+                    label.appendChild(labellibtn);
+                    divlabel.appendChild(label);
+                    
+
+                })
+                leftpart.appendChild(divlabel)
+            }catch(err){
+                console.log("fatch data error :" + err)
+            }
+        }
+
+
+
+
+
+        document.addEventListener("DOMContentLoaded", loadAndDisplayStoredItems);
+
+    </script>
+</body>
+
+</html>

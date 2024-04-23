@@ -1,0 +1,55 @@
+#form{
+    margin: 10vh 10vh;
+    width: 60vh;
+    height: 66vh;
+}
+#outputsection{
+    display: flex;
+    flex-direction: row;
+}
+#left{
+    padding: 5vh;
+    border: 2px solid black;
+    width: 115vh;
+    /* height: 63vh; */
+    border-radius: 2vh;
+    margin-top: 10vh;
+}
+#right{
+    border-top-right-radius: 2vh;
+    border-bottom-right-radius: 2vh;
+    padding: 7vh;
+    width: 100vh;
+    height: 60vh;
+    border: 2px solid black;
+}
+#output{
+    margin: 20vh 30vh;
+}
+#form{
+    border: 2px solid black;
+    padding: 6vh 0 5vh 6vh;
+}
+#submitbtn{
+    width: 45vh;
+}
+#adddetails input{
+    width: 45vh;
+}
+#postli{
+    width: 80vh;
+}
+#postbtn{
+    border-radius: 3vh;
+    width: 5.3vh;
+    height: 5vh;
+    background-color: aqua;
+    border: 2px dotted black;
+}
+#divlabel{
+    display: flex;
+    flex-direction: row;
+}
+#contentli{
+    width: 96vh;
+}
