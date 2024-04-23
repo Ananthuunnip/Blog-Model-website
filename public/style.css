@@ -46,10 +46,13 @@
     background-color: aqua;
     border: 2px dotted black;
 }
-#divlabel{
+/* #divlabel{
     display: flex;
-    flex-direction: row;
-}
+    flex-direction: column;
+} */
 #contentli{
     width: 96vh;
+}
+#label{
+    width: 80vh;
 }

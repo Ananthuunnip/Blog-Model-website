@@ -17,10 +17,6 @@ exports.postaddblog = (req,res,next)=>{
         author : author,
         content :content
     })
-    // .then((result)=>{
-    //     console.log('blog Added');
-    //     res.redirect('/postblogdata');
-    // })
     .then((result)=>{
         console.log('blog Added');
         res.redirect('/');
@@ -36,5 +32,17 @@ exports.fetchblogs = (req,res,next)=>{
         console.log(posts)
     })
     .catch((err)=>console.log("fetch-router error : "+ err));
-
+}
+exports.fetchoneblogs = async (req,res,next)=>{
+    const clickid = req.params.valueid;
+    console.log("fetchoneblogs : ", clickid)
+    try {
+        // Find a single blog post by id
+        const content = await blogpost.findOne({ where: { id: clickid } });
+        
+        // Check if a blog post was found
+        res.json({ data: content });
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
