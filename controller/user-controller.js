@@ -1,6 +1,7 @@
 const path = require('path');
 const rootDir = require('../utils/path');
 const blogpost = require('../model/user-model')
+const blogcomment = require('../model/comment-model')
 
 exports.getmainpage = (req,res,next)=>{
     res.sendFile(path.join(rootDir,"view","index.html"))
@@ -45,4 +46,41 @@ exports.fetchoneblogs = async (req,res,next)=>{
     } catch (error) {
         console.error('Error:', error);
     }
+}
+
+// comment 
+exports.postblogscomment = async (req, res, next) => {
+    const blogid = req.params.blogid;
+    const comment = req.body.comment;
+    console.log(blogid)
+    console.log(comment)
+    blogcomment.create({
+        blogId : blogid,  
+        comment : comment
+    })
+    .then((result) => {
+      console.log("Added to User");
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+  });
+
+  
+};
+
+exports.fetchblogscomments = async (req,res,next)=>{
+    console.log("hello");
+    const blogid = req.params.blogid;
+    console.log("fetchblogs : "+ blogid);
+
+    blogcomment.findAll({
+        where: { blogId: blogid }
+    })
+    .then(comments => {
+        res.json(comments);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 }

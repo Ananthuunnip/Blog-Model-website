@@ -65,90 +65,108 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
     <script>
         const leftpart = document.getElementById('left');
-        async function loadAndDisplayStoredItems(){
-            try{
+    
+        async function loadAndDisplayStoredItems() {
+            try {
                 const res = await axios.get('http://localhost:3000/fetch-blogs');
                 console.log(res.data);
                 const divlabel = document.createElement('div');
-                divlabel.id = "divlabel"
-
-                
+                divlabel.id = "divlabel";
+    
                 res.data.forEach((post) => {
                     const label = document.createElement('ul');
                     const labelli = document.createElement("li");
                     const labellibtn = document.createElement("button");
-                    
+    
                     labelli.textContent = post.title;
-                    labellibtn.type = "button"; // Change type to "button" instead of "submit"
+                    labellibtn.type = "button";
                     labellibtn.textContent = "+";
                     labellibtn.setAttribute("value", post.id);
-                    
+    
                     label.id = "label";
                     label.className = "list-group";
                     labelli.className = "list-group-item";
                     labelli.id = "postli";
                     labellibtn.className = "btn";
                     labellibtn.id = "postbtn";
-                    
-                    // Create elements to display author and content
+    
+    
                     const authorElement = document.createElement("li");
                     authorElement.className = "list-group-item";
                     authorElement.textContent = `Author: ${post.author}`;
-                    authorElement.style.display = "none"; // Initially hide the author
-                    
+                    authorElement.style.display = "none";
+    
                     const contentElement = document.createElement("li");
                     contentElement.className = "list-group-item";
                     contentElement.textContent = `Content: ${post.content}`;
-                    contentElement.style.display = "none"; // Initially hide the content
-
-
+                    contentElement.style.display = "none";
+    
                     const commentdiv = document.createElement("div");
                     const commentlabel = document.createElement("label");
                     const commentinput = document.createElement("input");
                     const commentbtm = document.createElement("button");
                     commentinput.className = "list";
-
-
-
-
-                    commentinput.setAttribute = ("value","text")
-                    commentlabel.textContent = "COMMENTS"
-                    commentbtm.textContent = "Submit"
-                    commentbtm.setAttribute = ("type","submit")
-                    commentdiv.appendChild(commentlabel)
-                    commentdiv.appendChild(commentinput)
-                    commentdiv.appendChild(commentbtm)
-                    commentdiv.style.display = "none"; // Initially hide the content
-                    contentElement.appendChild(commentdiv)  
-                    commentbtm.addEventListener("submit",async ()=>{
-                        const res = await axios.post('http://localhost:3000/fetch-blogs-comment');
-
-                    })
-                    
-                    labellibtn.addEventListener("click", () => {
-                        // Toggle visibility of author and content on button click
+                    commentinput.id = "abcdinput";
+                    commentbtm.id = "abcdsubmit";
+    
+                    commentinput.setAttribute("name", "comment");
+                    commentlabel.textContent = "COMMENTS";
+                    commentbtm.textContent = "Submit";
+    
+                    commentdiv.appendChild(commentlabel);
+                    commentdiv.appendChild(commentinput);
+                    commentdiv.appendChild(commentbtm);
+                    commentdiv.style.display = "none";
+                    contentElement.appendChild(commentdiv);
+    
+                    commentbtm.addEventListener("click", async () => {
+                        const blogid = labellibtn.getAttribute("value");
+                        const comment = commentinput.value;
+                        console.log(comment);
+                        const res = await axios.post(`http://localhost:3000/post-blogs-comment/${blogid}`, { comment });
+                        const rea = await axios.get(`http://localhost:3000/fetch-blogs-comment/${blogid}`);
+                        document.getElementById('abcdinput').value = " ";
+    
+                        const commentdiv = document.createElement('div');
+    
+                        const commentElements = label.querySelectorAll('.comment');
+                        commentElements.forEach(commentElement => {
+                            commentElement.remove();
+                        });
+    
+                        rea.data.forEach((comment) => {
+                            console.log("Comment:", comment);
+                            const commentli = document.createElement('li');
+                            commentli.className = 'list-group-item comment';
+                            commentli.textContent = comment.comment;
+                            commentdiv.appendChild(commentli);
+                        });
+                        label.appendChild(commentdiv);
+                    });
+    
+                    labellibtn.addEventListener("click", async () => {
                         authorElement.style.display = authorElement.style.display === "none" ? "block" : "none";
                         contentElement.style.display = contentElement.style.display === "none" ? "block" : "none";
                         commentdiv.style.display = commentdiv.style.display === "none" ? "block" : "none";
                     });
-                    
-                    // Append all elements to the label
+    
                     labelli.appendChild(labellibtn);
                     label.appendChild(labelli);
                     label.appendChild(authorElement);
                     label.appendChild(contentElement);
-                    label.appendChild(commentdiv);
+    
                     divlabel.appendChild(label);
                 });
-                
+    
                 leftpart.appendChild(divlabel);
-               
-            }catch(err){
-                console.log("fatch data error :" + err)
+    
+            } catch (err) {
+                console.log("fetch data error: " + err);
             }
         }
+    
         document.addEventListener("DOMContentLoaded", loadAndDisplayStoredItems);
-
+    </script>
     </script>
 </body>
 
